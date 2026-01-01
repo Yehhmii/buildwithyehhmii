@@ -1,82 +1,75 @@
 'use client';
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
-import { useRef } from 'react';
-import { 
-  Code2, 
-  Layers, 
-  MessageSquare, 
-  Database, 
-  Terminal, 
-  GraduationCap 
-} from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
+import { client } from '@/sanity/lib/client';
+import { skillsQuery, techStackQuery } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
+import * as LucideIcons from 'lucide-react';
 
-const skills = [
-  {
-    icon: Code2,
-    title: 'Software Engineering',
-    description: 'As a software engineer, I specialize in designing, developing, and maintaining software solutions that solve complex problems and improve user experiences. I am adept at optimizing performance and ensuring the scalability and reliability of applications across various platforms.',
-  },
-  {
-    icon: Layers,
-    title: 'Full Stack Developer',
-    description: 'With expertise in both front-end and back-end technologies, MERN Stack and PHP I develop complete web applications from scratch. I ensure smooth integration between the user interface and server-side components, delivering a seamless and responsive experience for end-users.',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Creative Speaking',
-    description: 'Skilled in effective communication, I excel at analyzing complex problems and translating them into clear, actionable insights. My ability to articulate ideas with precision ensures that diverse audiences can easily grasp intricate concepts. I adapt my approach to ensure maximum impact and resonance with the audience.',
-  },
-  {
-    icon: Database,
-    title: 'MERN Stack',
-    description: 'As a MERN stack developer, I work with MongoDB, Express.js, React, and Node.js to build high-performance web applications. I create responsive, real-time solutions that meet modern web development standards, ensuring smooth functionality across all devices.',
-  },
-  {
-    icon: Terminal,
-    title: 'Python Developer',
-    description: 'I utilize Python for building clean and efficient code, particularly for web development. I envision automation, data analysis, and machine learning. With Python\'s versatility, I develop solutions that automate repetitive tasks, analyze large datasets, and build scalable applications.',
-  },
-  {
-    icon: GraduationCap,
-    title: 'Tutor',
-    description: 'As a tutor, I take pride in helping students grasp complex technical concepts and guiding them to become proficient developers. I provide personalized learning experiences, making sure that learners develop the skills necessary to excel in their software development journeys.',
-  },
-];
+interface Skill {
+  _id: string;
+  title: string;
+  icon: string;
+  description: string;
+  order: number;
+}
 
-// Tech stack logos - replace with your actual image paths
-const techStack = [
-  { name: 'Next.js', image: '/tech/nextjs.png' },
-  { name: 'React', image: '/tech/react.png' },
-  { name: 'JavaScript', image: '/tech/js.png' },
-  { name: 'TypeScript', image: '/tech/typescript.png' },
-  { name: 'Node.js', image: '/tech/nodejs.png' },
-  { name: 'MongoDB', image: '/tech/mongodb.png' },
-  { name: 'Express', image: '/tech/express.jpeg' },
-  { name: 'Python', image: '/tech/python.png' },
-  { name: 'PHP', image: '/tech/php.png' },
-  { name: 'Tailwind CSS', image: '/tech/tailwind.png' },
-  { name: 'Communication', image: '/tech/conversations.gif' },
-  { name: 'Git', image: '/tech/git.png' },
-  { name: 'Data Analysis', image: '/tech/dataanalysis.png' },
-  { name: 'Docker', image: '/tech/docker.png' },
-  { name: 'Flutter', image: '/tech/flutter.webp' },
-  { name: 'Documentation', image: '/tech/form.gif' },
-  { name: 'html', image: '/tech/html.png' },
-  { name: 'Nest.js', image: '/tech/nestjs.png' },
-  { name: 'Speaking', image: '/tech/press-conference.gif' },
-  { name: 'TypeScript', image: '/tech/typescript.png' },
-  { name: 'Vercel', image: '/tech/vercel.png' },
-  { name: 'vite', image: '/tech/vite.jpeg' },
-  { name: 'xampp', image: '/tech/xampp.png' },
-  { name: 'Postgresql', image: '/tech/postgresql.png' },
-];
-
-// Duplicate for seamless loop
-const duplicatedTechStack = [...techStack, ...techStack, ...techStack];
+interface TechStack {
+  _id: string;
+  name: string;
+  logo: any;
+  order: number;
+}
 
 export default function Skills() {
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [techStack, setTechStack] = useState<TechStack[]>([]);
+  const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Fetch skills and tech stack from Sanity
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [skillsData, techStackData] = await Promise.all([
+          client.fetch(skillsQuery),
+          client.fetch(techStackQuery)
+        ]);
+        setSkills(skillsData);
+        setTechStack(techStackData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // Duplicate for seamless loop
+  const duplicatedTechStack = [...techStack, ...techStack, ...techStack];
+
+  if (loading) {
+    return (
+      <section
+        id="skills"
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          backgroundColor: '#0a0a0a',
+          padding: '8rem 1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ color: '#2d5016', fontSize: '1.5rem', fontWeight: 700 }}>
+          Loading Skills...
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -175,12 +168,10 @@ export default function Skills() {
         className="md:grid-cols-2"
         >
           {skills.map((skill, index) => {
-            // Determine if this card is in the left column (even index) or right column (odd index)
             const isLeftColumn = index % 2 === 0;
-            
             return (
               <SkillCard 
-                key={skill.title} 
+                key={skill._id} 
                 skill={skill} 
                 index={index}
                 isLeftColumn={isLeftColumn}
@@ -190,138 +181,140 @@ export default function Skills() {
         </div>
 
         {/* Tech Stack Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          style={{ marginTop: '8rem' }}
-        >
-          <h3 style={{
-            fontSize: 'clamp(2rem, 5vw, 3rem)',
-            fontWeight: 900,
-            color: '#f5f5f5',
-            textAlign: 'center',
-            marginBottom: '4rem',
-            letterSpacing: '-0.02em',
-          }}>
-            Tech <span style={{ color: '#2d5016' }}>Stack</span>
-          </h3>
+        {techStack.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            style={{ marginTop: '8rem' }}
+          >
+            <h3 style={{
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontWeight: 900,
+              color: '#f5f5f5',
+              textAlign: 'center',
+              marginBottom: '4rem',
+              letterSpacing: '-0.02em',
+            }}>
+              Tech <span style={{ color: '#2d5016' }}>Stack</span>
+            </h3>
 
-          {/* Infinite Scrolling Tech Stack */}
-          <div style={{
-            position: 'relative',
-            overflow: 'hidden',
-            padding: '2rem 0',
-          }}>
-            {/* Gradient overlays */}
+            {/* Infinite Scrolling Tech Stack */}
             <div style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: '150px',
-              background: 'linear-gradient(to right, #0a0a0a, transparent)',
-              zIndex: 2,
-            }} />
-            <div style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: '150px',
-              background: 'linear-gradient(to left, #0a0a0a, transparent)',
-              zIndex: 2,
-            }} />
+              position: 'relative',
+              overflow: 'hidden',
+              padding: '2rem 0',
+            }}>
+              {/* Gradient overlays */}
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: '150px',
+                background: 'linear-gradient(to right, #0a0a0a, transparent)',
+                zIndex: 2,
+              }} />
+              <div style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: '150px',
+                background: 'linear-gradient(to left, #0a0a0a, transparent)',
+                zIndex: 2,
+              }} />
 
-            <motion.div
-              animate={{
-                x: [0, -33.333 * techStack.length],
-              }}
-              transition={{
-                x: {
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  duration: 30,
-                  ease: "linear",
-                },
-              }}
-              style={{
-                display: 'flex',
-                gap: '4rem',
-                width: 'fit-content',
-              }}
-            >
-              {duplicatedTechStack.map((tech, index) => (
-                <div
-                  key={`${tech.name}-${index}`}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '1rem',
-                    minWidth: '120px',
-                  }}
-                >
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    backgroundColor: 'rgba(45, 80, 22, 0.05)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(45, 80, 22, 0.2)',
-                    borderRadius: '1rem',
-                    padding: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                    e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.05)';
-                  }}
+              <motion.div
+                animate={{
+                  x: [0, -33.333 * techStack.length],
+                }}
+                transition={{
+                  x: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 30,
+                    ease: "linear",
+                  },
+                }}
+                style={{
+                  display: 'flex',
+                  gap: '4rem',
+                  width: 'fit-content',
+                }}
+              >
+                {duplicatedTechStack.map((tech, index) => (
+                  <div
+                    key={`${tech._id}-${index}`}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '1rem',
+                      minWidth: '120px',
+                    }}
                   >
-                    <Image
-                      src={tech.image}
-                      alt={tech.name}
-                      width={50}
-                      height={50}
-                      style={{
-                        objectFit: 'contain',
-                        filter: 'brightness(1.5)',
-                      }}
-                    />
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      backgroundColor: 'rgba(45, 80, 22, 0.05)',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(45, 80, 22, 0.2)',
+                      borderRadius: '1rem',
+                      padding: '1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.3s',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.1)';
+                      e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.05)';
+                    }}
+                    >
+                      <Image
+                        src={urlFor(tech.logo).width(100).height(100).url()}
+                        alt={tech.name}
+                        width={50}
+                        height={50}
+                        style={{
+                          objectFit: 'contain',
+                          filter: 'brightness(1.5)',
+                        }}
+                      />
+                    </div>
+                    <span style={{
+                      color: 'rgba(245, 245, 245, 0.6)',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      textAlign: 'center',
+                    }}>
+                      {tech.name}
+                    </span>
                   </div>
-                  <span style={{
-                    color: 'rgba(245, 245, 245, 0.6)',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    textAlign: 'center',
-                  }}>
-                    {tech.name}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
       </div>
     </section>
   );
 }
 
-// Individual Skill Card Component with scroll animations
+// Individual Skill Card Component
 function SkillCard({ 
   skill, 
   index, 
   isLeftColumn 
 }: { 
-  skill: typeof skills[0]; 
+  skill: Skill; 
   index: number;
   isLeftColumn: boolean;
 }) {
@@ -332,7 +325,8 @@ function SkillCard({
     amount: 0.3 
   });
 
-  const Icon = skill.icon;
+  // Get the icon component dynamically from Lucide
+  const IconComponent = (LucideIcons as any)[skill.icon] || LucideIcons.Code2;
 
   return (
     <motion.div
@@ -401,7 +395,7 @@ function SkillCard({
             justifyContent: 'center',
             marginBottom: '1.5rem',
           }}>
-            <Icon style={{ width: '35px', height: '35px', color: '#2d5016' }} />
+            <IconComponent style={{ width: '35px', height: '35px', color: '#2d5016' }} />
           </div>
 
           {/* Title */}

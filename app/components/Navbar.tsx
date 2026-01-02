@@ -8,7 +8,7 @@ const navItems = [
   { name: 'About', href: 'about' },
   { name: 'Skills', href: 'skills' },
   { name: 'Projects', href: 'projects' },
-  { name: 'Experience', href: 'experience' },
+  { name: 'Services', href: 'services' },
   { name: 'Contact', href: 'contact' },
 ] as const;
 
@@ -16,6 +16,10 @@ export default function Navbar() {
   const scrollDirection = useScrollDirection();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const whatsappNumber = '2348158619466';
+  const whatsappMessage = encodeURIComponent("Hi! I'd like to discuss a project with you");
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -141,11 +145,14 @@ export default function Navbar() {
                 ))}
               </div>
 
-              <motion.button
-                onClick={() => scrollToSection('contact')}
+              {/* WhatsApp Button - Desktop */}
+              <motion.a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="hidden lg:block"
+                className="hidden lg:inline-block"
                 style={{
                   backgroundColor: '#2d5016',
                   color: '#f5f5f5',
@@ -158,6 +165,7 @@ export default function Navbar() {
                   boxShadow: '0 10px 15px -3px rgba(45, 80, 22, 0.2)',
                   border: 'none',
                   cursor: 'pointer',
+                  textDecoration: 'none',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#3d6026';
@@ -166,8 +174,8 @@ export default function Navbar() {
                   e.currentTarget.style.backgroundColor = '#2d5016';
                 }}
               >
-                Let's Build
-              </motion.button>
+                Let's Chat
+              </motion.a>
 
               {/* Mobile Menu Button */}
               <button
@@ -295,8 +303,11 @@ export default function Navbar() {
                     {item.name}
                   </motion.button>
                 ))}
-                <motion.button
-                  onClick={() => scrollToSection('contact')}
+                {/* WhatsApp Button - Mobile */}
+                <motion.a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 }}
@@ -312,6 +323,9 @@ export default function Navbar() {
                     transition: 'all 0.3s',
                     border: 'none',
                     cursor: 'pointer',
+                    textDecoration: 'none',
+                    display: 'block',
+                    textAlign: 'center',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#3d6026';
@@ -320,8 +334,8 @@ export default function Navbar() {
                     e.currentTarget.style.backgroundColor = '#2d5016';
                   }}
                 >
-                  Let's Build
-                </motion.button>
+                  Let's Chat
+                </motion.a>
               </div>
             </motion.div>
           </>

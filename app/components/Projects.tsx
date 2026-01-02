@@ -163,8 +163,6 @@ export default function Projects() {
     );
   }
 
-  console.log('Rendering - Phase:', animationPhase, 'HasAnimated:', hasAnimated, 'Projects:', projects.length);
-
   return (
     <section
       id="projects"
@@ -286,14 +284,36 @@ export default function Projects() {
         </motion.div>
       </div>
 
-      <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
-        {/* Section Header */}
-        <div style={{ marginBottom: '4rem' }}>
+      {/* FIXED: Centered container for header */}
+      <div style={{ 
+        maxWidth: '1600px', 
+        margin: '0 auto', 
+        position: 'relative', 
+        zIndex: 10,
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}>
+        {/* Section Header - FIXED: Now centered */}
+        <div style={{ 
+          marginBottom: '4rem',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+        }}>
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
             <div style={{
               display: 'inline-block',
@@ -326,7 +346,7 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Projects Animation Container */}
+      {/* FIXED: Projects Animation Container - Now properly centered */}
       <div style={{
         position: 'relative',
         minHeight: '600px',
@@ -334,22 +354,26 @@ export default function Projects() {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '2rem 1rem',
+        width: '100%',
+        maxWidth: '1600px',
+        margin: '0 auto',
       }}>
         {animationPhase === 'stack' ? (
           // Final Phase: Stacked Cards with Holographic Text
           <div style={{
             position: 'relative',
             width: '100%',
-            maxWidth: '500px',
             height: '600px',
-            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
             {/* Navigation Arrows - Desktop */}
             <button
               onClick={handlePrev}
               style={{
                 position: 'absolute',
-                left: '-60px',
+                left: 'calc(50% - 260px)',
                 top: '50%',
                 transform: 'translateY(-50%)',
                 width: '50px',
@@ -381,7 +405,7 @@ export default function Projects() {
               onClick={handleNext}
               style={{
                 position: 'absolute',
-                right: '-60px',
+                right: 'calc(50% - 260px)',
                 top: '50%',
                 transform: 'translateY(-50%)',
                 width: '50px',
@@ -419,6 +443,7 @@ export default function Projects() {
               gap: '1rem',
               zIndex: 200,
             }}
+            className="md:hidden"
             >
               <button
                 onClick={handlePrev}
@@ -433,7 +458,6 @@ export default function Projects() {
                   justifyContent: 'center',
                   cursor: 'pointer',
                 }}
-                className="md:hidden"
               >
                 <ArrowLeft style={{ width: '24px', height: '24px', color: '#2d5016' }} />
               </button>
@@ -450,7 +474,6 @@ export default function Projects() {
                   justifyContent: 'center',
                   cursor: 'pointer',
                 }}
-                className="md:hidden"
               >
                 <ArrowRight style={{ width: '24px', height: '24px', color: '#2d5016' }} />
               </button>
@@ -491,10 +514,8 @@ export default function Projects() {
                       position: 'absolute',
                       width: '90%',
                       maxWidth: '400px',
-                      left: '5%',
                       cursor: isActive ? 'pointer' : 'default',
                     }}
-                    className="sm:left-1/2 sm:-ml-[200px] sm:w-full"
                   >
                     <div style={{
                       backgroundColor: '#fff',

@@ -1,0 +1,10 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin areas
+Disallow: /api/
+Disallow: /studio/
+
+# Sitemap location
+Sitemap: https://your-domain.com/sitemap.xml

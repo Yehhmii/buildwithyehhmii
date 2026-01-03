@@ -20,7 +20,6 @@ export default function Home() {
       <Services />
       <Contact />
       <Footer />
-      {/* Other sections will go here */}
     </>
   );
 }

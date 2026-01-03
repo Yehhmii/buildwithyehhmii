@@ -93,9 +93,10 @@ export default function Testimonials() {
         position: 'relative',
         minHeight: '100vh',
         backgroundColor: '#0a0a0a',
-        padding: '8rem 1.5rem',
+        padding: '4rem 1rem',
         overflow: 'hidden',
       }}
+      className="md:py-32 md:px-6"
     >
       {/* Background Pattern */}
       <div style={{
@@ -139,7 +140,8 @@ export default function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          style={{  textAlign: 'center' }}
+          style={{ textAlign: 'center', marginBottom: '3rem' }}
+          className="md:mb-16"
         >
           <div style={{
             display: 'inline-block',
@@ -160,7 +162,7 @@ export default function Testimonials() {
             </span>
           </div>
           <h2 style={{
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            fontSize: 'clamp(2rem, 6vw, 4.5rem)',
             fontWeight: 900,
             color: '#f5f5f5',
             letterSpacing: '-0.02em',
@@ -175,11 +177,14 @@ export default function Testimonials() {
           position: 'relative',
           maxWidth: '900px',
           margin: '0 auto',
-          height: '600px',
+          minHeight: '500px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
+          padding: '1rem 0 4rem',
+        }}
+        className="md:h-[600px] md:py-0"
+        >
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
             {testimonials.map((testimonial, index) => {
               // Calculate card position in the deck
@@ -227,28 +232,41 @@ export default function Testimonials() {
                     position: 'absolute',
                     width: '100%',
                     maxWidth: '800px',
+                    padding: '0 1rem',
                   }}
+                  className="md:px-0"
                 >
                   <div style={{
                     backgroundColor: 'rgba(45, 80, 22, 0.05)',
                     backdropFilter: 'blur(20px)',
                     border: '2px solid rgba(45, 80, 22, 0.2)',
-                    borderRadius: '2rem',
-                    padding: '3rem',
+                    borderRadius: '1.5rem',
+                    padding: '2rem',
                     position: 'relative',
                     overflow: 'hidden',
                     boxShadow: isActive 
                       ? '0 30px 60px rgba(45, 80, 22, 0.2)' 
                       : '0 10px 30px rgba(0, 0, 0, 0.2)',
-                  }}>
+                  }}
+                  className="md:rounded-[2rem] md:p-12"
+                  >
                     {/* Decorative Quote Icon */}
                     <div style={{
                       position: 'absolute',
-                      top: '2rem',
-                      right: '2rem',
+                      top: '1rem',
+                      right: '1rem',
                       opacity: 0.1,
-                    }}>
-                      <Quote style={{ width: '100px', height: '100px', color: '#2d5016' }} />
+                    }}
+                    className="md:top-8 md:right-8"
+                    >
+                      <Quote 
+                        style={{ 
+                          width: '60px', 
+                          height: '60px', 
+                          color: '#2d5016' 
+                        }} 
+                        className="md:w-[100px] md:h-[100px]"
+                      />
                     </div>
 
                     {/* Content */}
@@ -257,17 +275,20 @@ export default function Testimonials() {
                       <div style={{ 
                         display: 'flex', 
                         gap: '0.25rem', 
-                        marginBottom: '1.5rem' 
-                      }}>
+                        marginBottom: '1rem' 
+                      }}
+                      className="md:mb-6"
+                      >
                         {Array.from({ length: testimonial.rating }).map((_, i) => (
                           <Star
                             key={i}
                             style={{
-                              width: '20px',
-                              height: '20px',
+                              width: '16px',
+                              height: '16px',
                               fill: '#2d5016',
                               color: '#2d5016',
                             }}
+                            className="md:w-5 md:h-5"
                           />
                         ))}
                       </div>
@@ -275,11 +296,13 @@ export default function Testimonials() {
                       {/* Testimonial Text */}
                       <p style={{
                         color: 'rgba(245, 245, 245, 0.9)',
-                        fontSize: 'clamp(1.125rem, 2vw, 1.375rem)',
-                        lineHeight: 1.8,
-                        marginBottom: '2rem',
+                        fontSize: 'clamp(0.95rem, 2vw, 1.375rem)',
+                        lineHeight: 1.7,
+                        marginBottom: '1.5rem',
                         fontStyle: 'italic',
-                      }}>
+                      }}
+                      className="md:mb-8 md:leading-relaxed"
+                      >
                         "{testimonial.testimonial}"
                       </p>
 
@@ -287,19 +310,24 @@ export default function Testimonials() {
                       <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '1.5rem',
-                        paddingTop: '2rem',
+                        gap: '1rem',
+                        paddingTop: '1.5rem',
                         borderTop: '1px solid rgba(45, 80, 22, 0.2)',
-                      }}>
+                      }}
+                      className="md:gap-6 md:pt-8"
+                      >
                         {/* Profile Image */}
                         <div style={{
                           position: 'relative',
-                          width: '80px',
-                          height: '80px',
+                          width: '60px',
+                          height: '60px',
                           borderRadius: '50%',
                           overflow: 'hidden',
-                          border: '3px solid rgba(45, 80, 22, 0.3)',
-                        }}>
+                          border: '2px solid rgba(45, 80, 22, 0.3)',
+                          flexShrink: 0,
+                        }}
+                        className="md:w-20 md:h-20 md:border-[3px]"
+                        >
                           <Image
                             src={urlFor(testimonial.image).width(160).height(160).url()}
                             alt={testimonial.name}
@@ -309,21 +337,34 @@ export default function Testimonials() {
                         </div>
 
                         {/* Name and Role */}
-                        <div>
+                        <div style={{ minWidth: 0 }}>
                           <h4 style={{
-                            fontSize: '1.25rem',
+                            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
                             fontWeight: 800,
                             color: '#f5f5f5',
                             marginBottom: '0.25rem',
-                          }}>
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                          className="md:whitespace-normal"
+                          >
                             {testimonial.name}
                           </h4>
                           <p style={{
                             color: 'rgba(245, 245, 245, 0.6)',
-                            fontSize: '0.95rem',
+                            fontSize: 'clamp(0.8rem, 1.5vw, 0.95rem)',
+                            lineHeight: 1.4,
                           }}>
                             {testimonial.role}
-                            {testimonial.company && ` at ${testimonial.company}`}
+                            {testimonial.company && (
+                              <>
+                                <br className="md:hidden" />
+                                <span className="hidden md:inline"> at </span>
+                                <span className="md:hidden"> @ </span>
+                                {testimonial.company}
+                              </>
+                            )}
                           </p>
                         </div>
                       </div>
@@ -334,7 +375,7 @@ export default function Testimonials() {
             })}
           </AnimatePresence>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - Desktop Only */}
           {testimonials.length > 1 && (
             <>
               <button
@@ -410,12 +451,14 @@ export default function Testimonials() {
           {/* Progress Indicators */}
           <div style={{
             position: 'absolute',
-            bottom: '-60px',
+            bottom: '-40px',
             left: '50%',
             transform: 'translateX(-50%)',
             display: 'flex',
-            gap: '0.75rem',
-          }}>
+            gap: '0.5rem',
+          }}
+          className="md:bottom-[-60px] md:gap-3"
+          >
             {testimonials.map((_, index) => (
               <button
                 key={index}
@@ -424,9 +467,9 @@ export default function Testimonials() {
                   setCurrentIndex(index);
                 }}
                 style={{
-                  width: index === currentIndex ? '40px' : '12px',
-                  height: '12px',
-                  borderRadius: '6px',
+                  width: index === currentIndex ? '32px' : '10px',
+                  height: '10px',
+                  borderRadius: '5px',
                   backgroundColor: index === currentIndex 
                     ? '#2d5016' 
                     : 'rgba(45, 80, 22, 0.2)',
@@ -434,6 +477,7 @@ export default function Testimonials() {
                   cursor: 'pointer',
                   transition: 'all 0.3s',
                 }}
+                className={index === currentIndex ? 'md:w-10' : 'md:w-3 md:h-3'}
                 onMouseEnter={(e) => {
                   if (index !== currentIndex) {
                     e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.4)';

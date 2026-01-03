@@ -200,12 +200,86 @@ export default function Skills() {
               Tech <span style={{ color: '#2d5016' }}>Stack</span>
             </h3>
 
-            {/* Infinite Scrolling Tech Stack */}
-            <div style={{
-              position: 'relative',
-              overflow: 'hidden',
-              padding: '2rem 0',
-            }}>
+            {/* Mobile Grid (shown on mobile only) */}
+            <div 
+              className="grid md:hidden"
+              style={{
+                // display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '1.5rem',
+                padding: '0 1rem',
+              }}
+            >
+              {techStack.map((tech, index) => (
+                <motion.div
+                  key={tech._id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05, duration: 0.5 }}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.75rem',
+                  }}
+                >
+                  <div style={{
+                    width: '70px',
+                    height: '70px',
+                    backgroundColor: 'rgba(45, 80, 22, 0.05)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(45, 80, 22, 0.2)',
+                    borderRadius: '1rem',
+                    padding: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.backgroundColor = 'rgba(45, 80, 22, 0.05)';
+                  }}
+                  >
+                    <Image
+                      src={urlFor(tech.logo).width(100).height(100).url()}
+                      alt={tech.name}
+                      width={45}
+                      height={45}
+                      style={{
+                        objectFit: 'contain',
+                        filter: 'brightness(1.5)',
+                      }}
+                    />
+                  </div>
+                  <span style={{
+                    color: 'rgba(245, 245, 245, 0.6)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                    lineHeight: 1.2,
+                  }}>
+                    {tech.name}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Desktop: Infinite Scrolling (hidden on mobile) */}
+            <div
+              className="hidden md:block"
+              style={{
+                position: 'relative',
+                overflow: 'hidden',
+                padding: '2rem 0',
+              }}
+            >
               {/* Gradient overlays */}
               <div style={{
                 position: 'absolute',

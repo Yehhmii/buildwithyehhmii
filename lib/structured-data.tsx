@@ -8,7 +8,7 @@ export function generateStructuredData() {
         name: 'YEHHMII',
         url: 'https://buildwithyehhmii.vercel.app',
         image: 'https://buildwithyehhmii.vercel.app/profile-image.jpg',
-        email: 'emplen@gmail.com',
+        email: 'franciscoabhulimen@gmail.com',
         jobTitle: 'Full-Stack Developer & Software Engineer',
         worksFor: {
           '@type': 'Organization',

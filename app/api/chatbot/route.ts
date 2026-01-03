@@ -41,7 +41,7 @@ TECH STACK:
 - Cloud: AWS, Google Cloud, Vercel, Netlify
 
 CONTACT:
-- Email: emplen@gmail.com
+- Email: franciscoabhulimen@gmail.com
 - Location: Nigeria
 - Available for: Freelance projects, consulting, full-time opportunities
 

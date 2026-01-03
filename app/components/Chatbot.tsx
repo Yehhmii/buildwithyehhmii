@@ -17,7 +17,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "👋 Hi! I'm YEHHMII's AI assistant. Ask me anything about my services, skills, or projects!",
+      text: "👋 Hi! I'm Francisco's AI assistant. Ask me anything about my services, skills, or projects!",
       sender: 'bot',
       timestamp: new Date(),
     },
@@ -199,7 +199,7 @@ export default function Chatbot() {
                     color: '#f5f5f5',
                     marginBottom: '0.125rem',
                   }}>
-                    YEHHMII Assistant
+                    Francisco Assistant
                   </h3>
                   <p style={{
                     fontSize: '0.75rem',

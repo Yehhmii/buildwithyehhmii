@@ -280,7 +280,9 @@ export default function Hero() {
                 gap: 'clamp(0.5rem, 2vw, 2rem)',
               }}>
                 <span style={{ color: '#f5f5f5' }}>FRAN</span>
-                
+
+                <span style={{ color: '#2d5016' }}>CISC</span>
+
                 {/* Circular Profile Image */}
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
@@ -320,8 +322,6 @@ export default function Hero() {
                     />
                   </div>
                 </motion.div>
-
-                <span style={{ color: '#2d5016' }}>ISCO</span>
               </h1>
             </motion.div>
           </div>

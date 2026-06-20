@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { useRef, useState, useEffect } from 'react';
 
 const socialLinks = [
-  { icon: Github, href: 'https://github.com/yourusername', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
-  { icon: Twitter, href: 'https://twitter.com/yourusername', label: 'Twitter' },
+  { icon: Github, href: 'https://github.com/yehhmii', label: 'GitHub' },
+  { icon: Linkedin, href: 'https://linkedin.com/in/yehhmii', label: 'LinkedIn' },
+  { icon: Twitter, href: 'https://twitter.com/yehhmii', label: 'Twitter' },
 ] as const;
 
 const splashImages = [

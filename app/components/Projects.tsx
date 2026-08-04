@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
-import { X, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
+import { X, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
 import { client } from '@/sanity/lib/client';
 import { projectsQuery } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
@@ -23,6 +23,7 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(6);
   
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -276,18 +277,7 @@ export default function Projects() {
         position: 'relative',
         zIndex: 10,
       }}>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.15
-              }
-            }
-          }}
+        <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
@@ -296,24 +286,24 @@ export default function Projects() {
             perspective: '1500px'
           }}
         >
-          {projects.map((project, index) => (
+          {projects.slice(0, visibleCount).map((project, index) => (
             <motion.div
               key={project._id}
-              variants={{
-                hidden: { opacity: 0, y: 80, scale: 0.85, rotateX: 30, rotateY: -15 },
-                visible: { 
-                  opacity: 1, 
-                  y: 0, 
-                  scale: 1,
-                  rotateX: 0,
-                  rotateY: 0,
-                  transition: { 
-                    type: "spring", 
-                    stiffness: 70, 
-                    damping: 15,
-                    mass: 1 
-                  } 
-                }
+              initial={{ opacity: 0, y: 80, scale: 0.85, rotateX: 30, rotateY: -15 }}
+              whileInView={{ 
+                opacity: 1, 
+                y: 0, 
+                scale: 1,
+                rotateX: 0,
+                rotateY: 0,
+              }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 70, 
+                damping: 15,
+                mass: 1,
+                delay: (index % 6) * 0.1
               }}
               whileHover={{ 
                 y: -15, 
@@ -423,7 +413,49 @@ export default function Projects() {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
+
+        {/* Load More Button */}
+        {visibleCount < projects.length && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '4rem',
+            position: 'relative',
+            zIndex: 10,
+          }}>
+            <motion.button
+              whileHover={{ 
+                scale: 1.05,
+                backgroundColor: 'rgba(45, 80, 22, 0.2)',
+                borderColor: '#4a7c2a',
+                boxShadow: '0 0 20px rgba(74, 124, 42, 0.3)'
+              }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setVisibleCount(prev => prev + 6)}
+              style={{
+                backgroundColor: 'rgba(15, 15, 15, 0.8)',
+                backdropFilter: 'blur(10px)',
+                color: '#f5f5f5',
+                border: '1px solid rgba(45, 80, 22, 0.3)',
+                padding: '1rem 2.5rem',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.15em',
+                cursor: 'pointer',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'border-color 0.3s, background-color 0.3s, box-shadow 0.3s',
+              }}
+            >
+              <span>Load More Projects</span>
+              <ChevronDown style={{ width: '18px', height: '18px', color: '#4a7c2a' }} />
+            </motion.button>
+          </div>
+        )}
       </div>
 
       {/* Modal - keeping same as before */}

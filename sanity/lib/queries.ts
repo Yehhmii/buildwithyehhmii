@@ -1,7 +1,7 @@
 import { groq } from 'next-sanity'
 
 // Get all featured projects ordered by display order
-export const projectsQuery = groq`*[_type == "project" && featured == true] | order(order asc) {
+export const projectsQuery = groq`*[_type == "project"] | order(order asc, _createdAt desc) {
   _id,
   title,
   slug,
